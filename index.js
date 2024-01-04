@@ -1,8 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const { pool } = require("./pool");
+const { pool } = require("./database_config/pool");
+const cors = require("cors");
 
 require("dotenv").config();
+
+const bookingRoutes = require('./routes/bookingRoutes');
 
 const app = express();
 const port = process.env.SERVER_PORT;
@@ -10,8 +13,11 @@ const port = process.env.SERVER_PORT;
 // Middelware
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(cors());
 
 // Routes
+app.use('/bookings',bookingRoutes)
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
@@ -77,18 +83,6 @@ app.get("/members/:id", async (req, res) => {
   }
 });
 
-app.get("/bookings", async (req, res) => {
-  try {
-    const query =
-      "SELECT booking_id, court_id, member_id, booked_at, booking_date, booking_start_at, booking_end_at FROM bookings LIMIT 5";
-    const { rows } = await pool.query(query);
-    res.status(200).json(rows);
-    console.log("Success: Get all bookings");
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Failed! Server error, could not get bookings");
-  }
-});
 
 app.get("/days-of-week", async (req, res) => {
   try {
@@ -102,6 +96,46 @@ app.get("/days-of-week", async (req, res) => {
     res.status(500).send("Failed! Server error, could not get days of week");
   }
 });
+
+app.get("/start-times", async (req, res) => {
+  try {
+    const query =
+      "SELECT * FROM start_times";
+    const { rows } = await pool.query(query);
+    res.status(200).json(rows);
+    console.log("Success: Get start times");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Failed! Server error, could not get start times");
+  }
+});
+
+app.get("/durations", async (req, res) => {
+  try {
+    const query =
+      "SELECT * FROM durations";
+    const { rows } = await pool.query(query);
+    res.status(200).json(rows);
+    console.log("Success: Get durations");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Failed! Server error, could not get durations");
+  }
+});
+
+app.get("/booking-types", async (req, res) => {
+  try {
+    const query =
+      "SELECT * FROM booking_types";
+    const { rows } = await pool.query(query);
+    res.status(200).json(rows);
+    console.log("Success: Get booking_types");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Failed! Server error, could not get booking_types");
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
