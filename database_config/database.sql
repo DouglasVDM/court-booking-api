@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS courts;
 CREATE TABLE IF NOT EXISTS courts (
     court_id SERIAL,
-    court_name VARCHAR(255) NOT NULL,
+    court_name VARCHAR(20) NOT NULL,
     CONSTRAINT courts_pkey PRIMARY KEY (court_id),
     ON DELETE CASCADE,
     UNIQUE (court_name)
@@ -77,7 +77,7 @@ FROM booking_types bt;
 DROP TABLE IF EXISTS bookings;
 CREATE TABLE IF NOT EXISTS bookings (
     booking_id SERIAL UNIQUE,
-    court_id INT NOT NULL ,
+    court_name VARCHAR(20) NOT NULL,
     member_id INT NOT NULL,
     booked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     day_name varchar(20) NOT NULL,
@@ -85,20 +85,20 @@ CREATE TABLE IF NOT EXISTS bookings (
     duration_hours INT NOT NULL,
     booking_type_name VARCHAR(50) NOT NULL,
     CONSTRAINT bookings_pkey PRIMARY KEY (booking_id),
-    CONSTRAINT fk_court FOREIGN KEY(court_id) REFERENCES courts(court_id) ON DELETE CASCADE,
+    CONSTRAINT fk_court FOREIGN KEY(court_name) REFERENCES courts(court_name) ON DELETE CASCADE,
     CONSTRAINT fk_member FOREIGN KEY(member_id) REFERENCES members(member_id) ON DELETE CASCADE,
     CONSTRAINT fk_day FOREIGN KEY(day_name) REFERENCES days_of_week(day_name) ON DELETE CASCADE,
     CONSTRAINT fk_duration FOREIGN KEY(duration_hours) REFERENCES durations(duration_hours) ON DELETE CASCADE,
     CONSTRAINT fk_booking_type FOREIGN KEY(booking_type_name) REFERENCES booking_types(booking_type_name) ON DELETE CASCADE --    CONSTRAINT no_duplicate_booking UNIQUE (court_id, day_name, start_time)
 );
 INSERT INTO bookings (
-        court_id,
+        court_name,
         member_id,
         day_name,
         start_time,
         duration_hours,
         booking_type_name
     )
-VALUES (1, 1, 'Monday', '13:00', '3', 'singles');
+VALUES ('Court 1', 1, 'Monday', '13:00', '3', 'singles');
 SELECT *
 FROM bookings b;

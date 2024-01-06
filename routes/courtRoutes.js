@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const { id } = req.params; // Extract court_id from the URL parameter
+    const { id } = req.params; // Extract id from the URL parameter
     const query = "SELECT court_id, court_name FROM courts WHERE court_id = $1";
     const { rows } = await pool.query(query, [id]);
 
