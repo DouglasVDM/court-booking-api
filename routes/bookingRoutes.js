@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const query =
-      "SELECT booking_id, court_name, member_id, TO_CHAR(booked_at, 'HH:MI DD Month YYYY') AS formatted_booked_at, day_name, TO_CHAR(start_time, 'HH:MM') AS formatted_start_time, duration_hours, booking_type_name FROM bookings";
+      "SELECT booking_id, court_name, member_name, TO_CHAR(booked_at, 'HH:MI DD Month YYYY') AS formatted_booked_at, day_name, TO_CHAR(start_time, 'HH:MM') AS formatted_start_time, duration_hours, booking_type_name FROM bookings";
 
     const { rows } = await pool.query(query);
     res.status(200).json(rows);
@@ -18,12 +18,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:name", async (req, res) => {
   try {
-    const { id } = req.params; // Extract id from the URL parameter
+    const { member_name } = req.params; // Extract id from the URL parameter
 
     const query =
-      "SELECT booking_id, court_name, member_id, TO_CHAR(booked_at, 'HH:MI DD Month YYYY') AS formatted_booked_at, day_name, TO_CHAR(start_time, 'HH:MM') AS formatted_start_time, duration_hours, booking_type_name FROM bookings WHERE booking_id=$1";
+      "SELECT booking_id, court_name, member_name, TO_CHAR(booked_at, 'HH:MI DD Month YYYY') AS formatted_booked_at, day_name, TO_CHAR(start_time, 'HH:MM') AS formatted_start_time, duration_hours, booking_type_name FROM bookings WHERE booking_id=$1";
     const { rows } = await pool.query(query, [id]);
 
     if (rows.length === 0) {
