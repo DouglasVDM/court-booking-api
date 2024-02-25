@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
   try {
     const {
       court_name,
-      member_id,
+      member_name,
       day_name,
       start_time,
       duration_hours,
@@ -51,13 +51,13 @@ router.post("/", async (req, res) => {
     } = req.body;
 
     const query = `
-        INSERT INTO bookings (court_name, member_id, day_name, start_time, duration_hours, booking_type_name)
+        INSERT INTO bookings (court_name, member_name, day_name, start_time, duration_hours, booking_type_name)
         VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *;`;
 
     const values = [
       court_name,
-      member_id,
+      member_name,
       day_name,
       start_time,
       duration_hours,
