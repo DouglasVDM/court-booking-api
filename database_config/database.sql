@@ -16,12 +16,10 @@ FROM courts c;
 DROP TABLE IF EXISTS members;
 CREATE TABLE IF NOT EXISTS members (
     member_id SERIAL,
-    first_name VARCHAR(255) NOT NULL,
-    last_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
+    member_name VARCHAR(255) NOT NULL,
     CONSTRAINT members_pkey PRIMARY KEY (member_id),
     ON DELETE CASCADE,
-    UNIQUE (email)
+    UNIQUE (member_name)
 );
 INSERT INTO members (first_name, last_name, email)
 VALUES ('John', 'Doe', 'johndoe@gmail.com'),
